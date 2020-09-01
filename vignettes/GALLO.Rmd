@@ -1,0 +1,524 @@
+---
+title: "Genomic Annotation in Livestock for positional candidate LOci: GALLO"
+author: 
+- name: "Pablo A. S. Fonseca"
+  affiliation: 
+  -  &id "University of Guelph, Department of Animal Biosciences, Centre for Genetic Improvement of Livestock, Guelph, N1G 2W1, Ontario, Canada."
+  email: "pfonseca@uoguelph.ca"
+    
+- name: "Aroa Suárez-Vega"
+  affiliation: 
+  - *id
+  
+- name: "Gabriele Marras"
+  affiliation: 
+  -  *id
+  -  "The Semex Alliance, Guelph N1G 3Z2, Ontario, Canada"
+
+- name: "Angela Cánovas"
+  affiliation: 
+  - *id
+ 
+output:
+  BiocStyle::html_document 
+vignette: >
+  %\VignetteIndexEntry{GALLO} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{DT}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+\vspace{12pt}
+Genomic Annotation in Livestock for positional candidate LOci (GALLO) is an R package, for the accurate annotation of genes and Quantitative Trait Loci (QTLs) located within candidate markers and/or regions (haplotypes, windows, CNVs, etc) identified in the most common genomic analyses performed in livestock, such as Genome-Wide Association Studies or transcriptomics. Moreover, GALLO allows the graphical visualization of gene and QTL annotation results, data comparison among different grouping factors (e.g., methods, breeds, tissues, statistical models, studies, etc.), and QTL enrichment in different livestock species including cattle, pigs, sheep, and chicken, among others. 
+
+\centering
+## _Data examples_
+
+\raggedright
+\vspace{12pt}
+
+The example datasets composing this tutorial are subsets of Genome-Wide Association Studies (GWAS) for male fertility traits in cattle, which are summarized in Fonseca et al. (2018) and Cánovas et al. (2014). Additionally, the respective databases for gene and QTL annotation for these subsets are also available as internal data into GALLO package. It is possible to access the datasets using the following code:
+
+```{r echo=T, results='asis'}
+#Installation
+#devtools::install_github("pablobio/GALLO")
+
+#Loading the package
+library(GALLO)
+```
+
+
+```{r echo=T, results='asis'}
+#Importing QTL markers from example dataset
+data("QTLmarkers")
+
+DT::datatable(QTLmarkers, rownames = FALSE, extensions = 'FixedColumns',
+  options = list(scrollX = TRUE))
+
+dim(QTLmarkers)
+
+#Importing QTL windows from example dataset
+data("QTLwindows")
+DT::datatable(QTLwindows, rownames = FALSE, extensions = 'FixedColumns',
+  options = list(scrollX = TRUE))
+
+dim(QTLwindows)
+```
+
+Note that two datasets are available: QTLwindows and QTLmarkers. The QTLwindows dataset is composed by 50 candidate genomic regions, while the QTLmarkers dataset is composed by 141 candidate markers. The QTLmarkes dataset is composed by significantly associated markers for male fertility traits in cattle, while QTLwindows is composed by candidate windows in the genome.
+
+```{r echo=T, results='asis'}
+#Importing QTL annotation database
+data("gffQTLs")
+
+#Printing the first 100 rows
+DT::datatable(gffQTLs[1:100,], rownames = FALSE, extensions = 'FixedColumns',
+  options = list(scrollX = TRUE))
+
+dim(gffQTLs)
+
+#Importing gene annotation database
+data("gtfGenes")
+
+#Printing the first 100 rows
+DT::datatable(gtfGenes[1:100,], rownames = FALSE, extensions = 'FixedColumns',
+  options = list(scrollX = TRUE))
+
+dim(gtfGenes)
+
+```
+
+Note that two databases are available: gffQTLs and gtfGenes The gffQTLs dataset is composed by 59600 annoatted QTLs in the bovine Genome, while the gtfGenes dataset is composed by 17831 genes.
+\vspace{12pt}
+
+\centering
+## _Using GALLO_
+
+###  __List of functions__
+
+1. _import_gff_gtf():_ Takes a .gft or .gff file and import into a dataframe
+
+2. _find_genes_qtls_around_markers:_ Takes a dataframe with candidate markers and/or regions (haplotypes, windows, CNVs, etc) and search for genes or QTLs in a specified interval
+
+3. _overlapping_among_groups:_ Takes a dataframe with a column for genes, QTLs (or any other data) and a grouping column and create matrices with the ovelapping information
+
+4. _plot_overlapping:_ Takes the output from overlapping_amoung_groups function and creates a heatmap with the overlapping between groups
+
+5. _plot_qtl_info:_ Takes the output from find_genes_qtls_around_markers and create plots for the frequency of each QTL type and trait
+
+6. _qtl_enrich:_ Takes the output from find_genes_qtls_around_markers and perform a QTL enrichment analysis
+
+7. _QTLenrich_plot:_ Takes the output from _find_genes_qtls_around_markers function and creates a heatmap with the overlapping between groups
+
+8. _relationship_plot:_ Takes the output from find_genes_qtls_around_markers function and creates a chord plot with the relationship between groups
+
+\vspace{12pt}
+
+###  __Gene and QTL Annotation__
+
+\raggedright
+\vspace{12pt}
+
+In a conventional routine analysis, both .gff and .gtf files can be imported using the import_gff_gtf() function from GALLO package. 
+
++ _Arguments from import_gff_gtf_
+  
+  _import_gff_gtf(db_file, file_type)_
+  
+  __db_file:__ file with the gene mapping or QTL information. For the gene mapping, you should use the .gtf file download from Ensembl data base. For the QTL search, you need to inform the .gff file that can be downloaded from Animal QTlLdb. Both files must use the same reference annotation used in the original study.
+
+  __marker_file:__ gff (for QTL annotation) or gtf (for gene annotation). 
+
+```{r echo=T, results='asis'}
+#An example of how to import a QTL annotation file
+#qtl.inp <- import_gff_gtf(db_file="QTL_db.gff",file_type="gff")
+
+#An example of how to import a gene annotation file
+#qtf.inp <- import_gff_gtf(db_file="Gene_db.gtf",file_type="gtf")
+```
+\vspace{12pt}
+The main function of GALLO, find_genes_qtls_around_markers(), is responsible to perform the annotation of genes and/or co-localized QTLs within or nearby candidate markers or genomic regions (using a user’s defined interval/window). This function uses the information provided in the __.gtf file (for gene annotation)__ or __.gff (for QTL annotation)__ to retrieve the requested information. The gtf files can be downloaded from the Ensembl database and the gff file from the Animal QTLdb.
+
+\vspace{12pt}
+
+
+  + _Arguments from find_genes_qtls_around_markers_
+  
+  _find_genes_qtls_around_markers(db_file, marker_file, method = c("gene","qtl"), marker = c("snp", "haplotype"), interval = 0, nThreads = NULL)_
+  
+  __db_file:__ The dataframe created using the _import_gff_gtf function.
+
+  __marker_file:__ The file with the SNP or haplotype positions. Detail: For SNP files, you must have a column called “CHR” and a column called “BP” with the chromosome and base pair position, respectively. For the haplotype, you must have three columns: “CHR”, “BP1” and “BP2”. All the columns names are in uppercase. 
+
+  __method:__ “gene” or “qtl”. If "gene" method is selected, a .gtf files must be provided for the db_file argument. On the other hand, if the method "qtl" is selected, a .gff file from Animal QTLdb must be provided for the db_file argument.
+
+  __marker:__ "snp" or "haplotype". If "snp" option is selected, a dataframe with at least two mandatory columns (CHR and BP) must be provided for the marker_file argument. On the other hand, if "haplotype" option is selected, a dataframe with at least three mandatory columns (CHR, BP1 and BP2) must be provided for the marker_file argument. Any additional column can be included in the dataframe provided for the marker_file argument, for example, a column informing the study, model, breed, etc. from which the results were obtained
+
+  __interval:__ The interval in base pair which can be included upstream and downstream from the markers or haplotype coordinates
+
+  __nThreads:__ Number of threads to be used in the analysis
+  
+\vspace{12pt}
+
+#### Gene annotation
+
+For example, let`s run a gene and QTL annotation using the QTLwindows dataset without additional intervals (upstream and downstream, using the interval=0 argument) from the windows coordinates:
+
+```{r echo=T, results='asis'}
+
+#Running gene annotation
+out.genes<-find_genes_qtls_around_markers(db_file=gtfGenes,
+marker_file=QTLmarkers, method = "gene", 
+marker = "snp", interval = 500000, nThreads = NULL)
+
+#Checking the first rows from the output file
+DT::datatable(out.genes, rownames = FALSE, 
+  extensions = 'FixedColumns',
+  options = list(scrollX = TRUE))
+
+#Checking the dimensions of the output file
+dim(out.genes)
+```
+
+\vspace{12pt}
+The gene annotation resulted in 652 genes within the 1 Mb interval (500 Kb upstream and 500 Kb downstream) from the candidate markers.
+\vspace{12pt}
+
+#### QTL annotation
+
+```{r echo=T, results='asis'}
+#Running QTL annotation
+out.qtls<-find_genes_qtls_around_markers(db_file=gffQTLs,
+marker_file=QTLmarkers, method = "qtl",
+marker = "snp", interval = 500000, nThreads = NULL)
+
+#Checking the first rows from the output file
+DT::datatable(out.qtls, rownames = FALSE, 
+  extensions = 'FixedColumns',
+  options = list(scrollX = TRUE))
+
+#Checking the dimensions of the output file
+dim(out.qtls)
+```
+
+\vspace{12pt}
+The QTL annotation resulted in 3020 QTLs within the 1 Mb interval (500 Kb upstream and 500 Kb downstream) from the candidate markers.
+\vspace{12pt}
+
+__HINT:__ _It is important to highlight that both outputs are composed by all the columns in the input file (marker_file) plus the annotation columns from the gtf or gff file used in the annotation processes. Additionally, each row from the input file is repeated as many times as an annotation (gene or QTL) record was identified in the determined interval. Consequently, for example, for an input file composed of three genomic coordinates where 4 genes are annotated in the interval determined by the user, the output file of find_genes_qtls_around_markers() will contain 12 rows._
+
+\vspace{12pt}
+
+This output can be easily handled by summary functions in R, such as table(), to obtain information such as the total number of genes and QTLs, the number of genes and QTLs annotated per variants, etc. The same output file generated can be used as an input file for the other set of GALLO functions. This additional set of functions allows the graphical visualization of the results obtained including the summary of QTL types and traits annotated, the overlapping among traits, populations and other kinds of groups, as well as the relationship between candidate genetic regions and the annotated genes and QTLs. 
+
+\vspace{12pt}
+
+###  __Checking and plotting overlap among groups__
+
+The number of shared genes, QTLs, markers and any other information can be compared between grouping factors (such as studies, statistical models, breeds, etc.) using GALLO. The first step of this analysis is performed by the overlapping_among_groups function.
+
+\vspace{12pt}
+Here, we will compared the number of shared genes (gene_id) among the different studies (Reference) available on out.genes using the function overlapping_among_groups.
+
+\vspace{12pt}
+
+#### Checking overlap among groups
+
+  + _Arguments from overlapping_among_groups_
+  
+  _overlapping_among_groups(file, x, y)_
+  
+  __file:__ A dataframe with the data and grouping factor
+  
+  __x:__ The grouping factor to be compared
+  
+  __y:__ The data to be compared among the levels of the grouping factor
+  
+
+```{r echo=T}
+#Removing the duplicated records for Gene ID
+out.genes.unique<-out.genes[!duplicated(out.genes[c("Reference","gene_id")]),]
+#Calculating the number of shared genes between different studies
+overlap.genes<-overlapping_among_groups(file=out.genes.unique, x="Reference", y="gene_id")
+
+overlap.genes
+```
+\vspace{12pt}
+
+The output of this function is composed by a list with three matrices: 1) A matrix with the number of overllaping data; 2) A matrix with the percentage of overlapping; 3) A matrix with the combination of the two previous ones.
+
+\vspace{12pt}
+Now it is possible to plot the overlapping among the studies using the plot_overlapping function.
+\vspace{12pt}
+
+  + _plot_overlapping_
+  
+  _plot_overlapping(overlapping_matrix, nmatrix, ntext, group, labelcex = 1)_
+  
+  __overlapping_matrix:__ The list obtained in overlapping_amoung_groups function
+  
+  __nmatrix:__ An interger from 1 to 3 indicating wich matrix will be used to plot the overlapping, where: 1) A matrix with the number of shared data; 2) A matrix with the percentage of overlapping; 3) A matrix with the combination of the two previous matrices
+  
+  __ntext:__ An interger from 1 to 3 indicating wich matrix will be used as the text
+  matrix for the heatmap, where: 1) A matrix with the number of shared data; 2) A matrix with the percentage of overlapping; 3) A matrix with the combination of the two previous one
+  
+  __group:__ A vector with the size of groups. This vector will be plotted as row and column names in the heatmap
+  
+  __labelcex:__ A numeric value indicating the size of the row and column labels
+
+```{r echo=T}
+#Creating grouping labels (names of the references)
+group.labels<-unique(out.genes.unique$Reference)
+```
+
+```{r, fig.align="center", fig.width=8, fig.height=8, fig.cap="Gene overlapping among studies."}
+#plotting the overlapping information
+plot_overlapping(overlap.genes, nmatrix=2, ntext=3, group=group.labels, labelcex = 1)
+
+```
+\newpage
+__HINT:__ _The output matrices are not necessarily symmetric. For example, the percentage of shared genes between Feugant et al. (2010) and Buzanskas et al. (2017) is not the same percentage of shared genes between Buzanskas et al. (2017) and Feugang et al. (2010). The percentage of shared genes is calculated based on the total number of genes from the grouping factor "A" that are also present in the group "B" and vice-versa. Once the total number of genes in each group can be different, the percentage of genes (or any other data) from A shared with B can not be the same as B shared with A. The diagonals in the matrices represent the total number of genes in each study._
+
+\vspace{12pt}
+
+#### __Plot QTL annotation__
+
+The GALLO package also allows the user to plot the QTL information annotated using the plot_qtl_info function. This function can create a pie plot (using the option "qtl_type" in the argument qtl_plot) with the percentage of QTL classes and/or bar using the option "qtl_name" in the argument qtl_plot) plots with the percentage of each trait that composed the slice of the pie plot for a respective QTL class.
+
+\raggedright
+\vspace{12pt}
++ _plot_qtl_info_
+
+  _plot_qtl_info(qtl_file, qtl_plot = c("qtl_type", "qtl_name"),n = "all", qtl_class = NULL, ...)_
+  
+  __qtl_file:__ The output from find_genes_qtls_around_markers function
+  
+  __qtl_plot:__ "qtl_type" or"qtl_name"
+  
+  __n:__ Number of QTLs to be plotted when the qtl_name option is selected
+  
+  __qtl_class:__ Class of QTLs to be plotted when the qtl_name option is selected
+
+\vspace{12pt}
+```{r echo=T, fig.height = 40, fig.width = 16, fig.align = "center"}
+#plotting the percentage of each QTL class annoatted
+oldpar <- par(mar=c(1,30,1,1))
+plot_qtl_info(out.qtls, qtl_plot = "qtl_type", cex=2)
+par(oldpar)
+```
+
+
+The Reproduction QTL class was the most frequent annotated QTL class (44.01%), followed by Milk (31.06%), Production (10.1%), Exterior (8.21%), Meat and Carcass (4.97%) and health (2.55%). The percentage of each QTL classe can give us a better idea about how frequently our candidate regions are associated with each kind of QTL class. However, the investigation bias (number of studies) for a QTL traits, such as Milk related QTLs, will result in much more QTLs annotated for that trait. Consequently, we need to investigate in deep the relationship between our candidate regions and the previous reported QTLs. This analysis can help us to identify specialized regions across the genome for a trait and/or pleiotropic and espistatic effects in our candidate regions. 
+
+Using the same fucntion, plot_qtl_info, now we can check the respective percentages of each trait that was annotated and composed that QTL class. In order to do this, we need to inform the "Reproduction" class for the qtl_class argument.
+
+```{r, fig.width=8, fig.height=6, fig.cap="Percentage of each trait annotated as a Reproduction QTL in the candidate intervals."}
+#Setting margin parameter to better fit the axis labels
+oldpar<-par(mar=c(5,20,1,1))
+#plotting the percentage of each trait annoatted as a Reproduction QTL
+plot_qtl_info(out.qtls, qtl_plot = "qtl_name", qtl_class="Reproduction")
+par(oldpar)
+```
+\vspace{12pt}
+
+This plot allows to check the most representative traits within each kind of QTL classes. 
+
+__HINT:__ _The user can easily include this function in a for loop and plot the percentages for all the QTL classes. Additionally, the number of traits exhibited in the plots can be passed to the argument n. This can be performed using the following code, for example:_
+
+```{r, results='hide', eval=F}
+#Plotting percentage of the top 10 most frequent traits in all QTL classes 
+#(This is just an example code, the user do not need to execute 
+#this command for this tutorial)
+QTL_classes<-unique(out.qtls$QTL_type)
+
+for(c in QTL_classes){
+  tmp.file.name<-paste(c,".png",sep="")
+  png(tmp.file.name,w=1500,h=900)
+  plot_qtl_info(out.qtls, qtl_plot = "qtl_name", qtl_class=c, n=10)
+  dev.off
+}
+
+```
+
+\vspace{12pt}
+
+### __QTL enrichment analysis__
+
+\vspace{12pt}
+The simple bias of investigation for some traits (such as milk production related traits in the QTL database for cattle) may result in a larger proportion of records in the database. Consequently, the simple investigation of the proportion of each QTL type might not be totally useful. In order to reduce the impact of this bias, a QTL enrichment analysis can be performed. The QTL enrichment analysis performed by GALLO package is in a hypergeometric test using the number of annoatted QTLs within the candidate regions and the total number of the same QTL in the QTL database.
+\vspace{12pt}
+
+####  _qtl_enrich_
+
+  _qtl_enrich(qtl_db, qtl_file, qtl_type = c("QTL_type", "trait"),enrich_type = c("genome", "chromosome"), chr.subset = NULL, nThreads = NULL, padj = c("holm", "hochberg","hommel", "bonferroni", "BH", "BY", "fdr", "none"))_
+
+  __qtl_db:__	The .gff file that can be downloaded from Animal QTlLdb 
+  
+  __qtl_file:__	The output from find_genes_qtls_around_markers function
+  
+  __qtl_type:__	A character indicating which type of enrichment will be performed. "QTL_type" indicates that the enrichment processes will be performed for the QTL classes, while "Name" indicates that the enrichment analysis will be performed for each trait individually.
+  
+  __enrich_type:__ A character indicating if the enrichment analysis will be performed for all the chromosomes ("genome") or for a subset of chromosomes ("chromosome"). If the "genome" option is selected, the results reported are the merge of all chromosomes.
+  
+  __chr.subset:__ If enrich_type is equal "chromosome", it is possible to define a subset of chromosomes to be analyzed. The default is equal NULL. Therefore, all the chromosomes will be analyzed.
+
+  __nThreads:__ The number of threads used.
+
+  __padj:__	The alogorithm for multiple testing correction to be adopted ("holm", "hochberg", "hommel", "bonferroni", "BH", "BY","fdr", "none").
+
+\vspace{12pt}
+
+As an example, we are going to perform a enrichment analysis for all the QTL information annotated around the candidate markers using a chromosome-based enrichment analysis. The adjusted p-values will be calculated based on False-Discovery Rate (FDR). 
+
+\vspace{12pt}
+
+_This step might take some minutes to run depending of the user`s system._
+
+\vspace{12pt}
+
+```{r echo=T, results='asis'}
+#QTL enrichment analysis 
+out.enrich<-qtl_enrich(qtl_db=gffQTLs, 
+                       qtl_file=out.qtls, qtl_type = "Name",
+                       enrich_type = "chromosome", chr.subset = NULL, 
+                       padj = "fdr",nThreads = NULL)
+
+#Checking the enriched QTLs
+DT::datatable(out.enrich[order(out.enrich$pvalue),], 
+              rownames = FALSE,
+              extensions = 'FixedColumns',
+              options = list(scrollX = TRUE))
+```
+
+\vspace{12pt}
+The output from the qtl_enrich function is a data frame composed by 9 columns: 1) QTL: The QTL class or trait used for the enrichment; 2) CHR: The chromosome for that specific QTL or trait (if the option "chromosome" is informed to the argument enrich_type); 3) N_QTLs: Number of observed QTLs or traits in the dataset; 4) N_QTLs_db: Number of each annotated  QTL in the qTL database; 5) Total_annotated_QTLs: Total number of annotated QTLs; 6) Total_QTLs_db: Total number of QTLs in the QTL database; 7) pvalue: P-value for the enrichment analysis; 8) adj.pval: The adjusted p-value based on the multiple test correction selected by the user; 9) QTL_type= The QTL type for each annotated  trait.
+\vspace{12pt}
+
+__HINT:__ _It is possible to match the traits in the qtl_enrich output with the respective QTL classes from the QTL annotation output. Consequently, the enrichment results can be filtered by the QTL classes, such as Reproduction, Meat and Carcass, Production, etc._
+
+### __Plotting QTL enrichment analysis__
+
+The GALLO package allow the user to create a bubble plot in order to exhibit the QTL enrichment results. This can be performed by the QTLenrich_plot function.
+
+####  _QTLenrich_plot_
+
+_QTLenrich_plot(qtl_enrich, x, pval)_
+
+  __qtl_enrich:__ The output from qtl_enrich function
+
+  __x:__ ID column to be used from the qtl_enrich output
+
+  __pval:__ P-value to be used in the plot. If "p_value" informed, a non-adjusted pvalue will be plotted. If "p.adj" informed, the adjusted p-value from the qtl enrichment analysis will be plotted.
+\vspace{12pt}
+
+Before plot the enrichment results, a new ID column will be created in order to make easier to identify the enrichment results per chromosome. Additionally, we are going to match the QTL class for each trait and filter the top 10 enriched QTLs.
+\vspace{12pt}
+
+```{r, echo=T}
+#Creating a new ID composed by the trait and the chromosome
+out.enrich$ID<-paste(out.enrich$QTL," - ","CHR",out.enrich$CHR,sep="")
+
+#Match the QTL classes and filtering the Reproduction related QTLs
+out.enrich.filtered<-out.enrich[which(out.enrich$adj.pval<0.05),]
+```
+\vspace{12pt}
+\newpage
+```{r, fig.width=15, fig.height=10, fig.cap="Top 10 enriched traits identified in the QTL enrichment analysis. The area of the bubbles represents the number of observed QTLs for that class, while the color represents the p-value scale (the darker the color, smaller the p-value). Additionally, the x-axis shows the richness factor for each QTL, representing the ratio of number of QTLs and the expected number of that QTL."}
+#Plotting the enrichment results for the QTL enrichment analysis
+QTLenrich_plot(out.enrich.filtered, x="ID", pval="adj.pval")
+```
+
+_As any enrichment analysis, the quality of annotation, in this case, the number of association studies for a specific trait, can directly affect the enrichment results._ 
+
+\vspace{12pt}
+
+### __Relationship plot__
+
+The GALLO package allows the user to plot the relationship between any two sets of information. The package uses the circlize package (Gu et al., 2014) in order to create chord plots to exhibit the relationship between these set of information. For example, here, we will plot the relationship between the the studies in which the candidate markers were found  and the enriched QTLs identified in the QTL enrichment analysis. This plot can be created using the relationship_plot function.
+\vspace{12pt}
+
+#### relationship_plot
+
+_relationship_plot(qtl_file, x, y, grid.col = "gray60", degree = 90,canvas.xlim = c(-2, 2), canvas.ylim = c(-2, 2), cex)_
+\vspace{12pt}
+
+  __qtl_file:__	The output from find_genes_qtls_around_markers function
+
+  __x:__ The first grouping factor, to be plotted in the left hand side of the chord plot
+
+  __y:__	The second grouping factor, to be plotted in the left hand side of the chord plot
+
+  __grid.col:__	A character with the grid color for the chord plot or a vector with different colors to be used in the grid colors. Note that when a color vector is provided, the lenght of this vector must be equal the number of sectors in the chord plot
+
+  __degree:__ A numeric value corresponding to the starting degree from which the circle begins to draw. Note this degree is always reverse-clockwise
+
+  __canvas.xlim:__	The coordinate for the canvas in the x-axis. By default is c(-1,1)
+
+  __canvas.ylim:__	The coordinate for the canvas in the y-axis. By default is c(-1,1)
+
+  __cex:__	The size of the labels to be printed in the plot
+  
+\vspace{12pt}
+
+```{r, fig.width=9, fig.height=7, fig.cap="Chord plot showing the relationship between the studies (right-hand side) and the enriched QTLs (abbreviations in the left -hand side)."}
+
+#Filtering the output from QTL annotation
+
+#Creating a new ID to filter the top 10 enriched QTLs
+out.qtls$ID<-paste(out.qtls$Name," - ","CHR",out.qtls$CHR,sep="")
+out.enrich.filtered<-out.enrich.filtered[order(out.enrich.filtered$adj.pval),]
+out.qtls.filtered<-out.qtls[which(out.qtls$ID%in%out.enrich.filtered$ID[1:10]),]
+
+#Creating color scheme based on the References
+out.qtls.filtered[which(out.qtls.filtered$Reference=="Feugang et al. (2010)"),
+                  "color_ref"]<-"purple"
+
+out.qtls.filtered[which(out.qtls.filtered$Reference== "Buzanskas et al. (2017)"),
+                  "color_ref"]<-"pink"
+
+
+#Creating a color vector filled with black for all the traits abbreviation 
+#and with the respective colors for each reference
+color.grid<-c(rep("black",length(unique(out.qtls.filtered$Abbrev))),
+              unique(out.qtls.filtered$color_ref))
+
+#Naming the vector
+names(color.grid)<-c(unique(out.qtls.filtered$Abbrev),
+                     unique(out.qtls.filtered$Reference))
+
+#Plotting the relationship plot using the grid color created above
+relationship_plot(qtl_file=out.qtls.filtered, x="Abbrev",
+                  y="Reference",cex=1,gap=2.5,degree = 60,
+                  canvas.xlim = c(-5, 5), 
+                  canvas.ylim = c(-3, 3), grid.col = color.grid)
+```
+
+The GALLO package provides a user-friendly and straightforward environment to perform gene and QTL annotation, visualization, data comparison and QTL enrichment for functional studies in livestock species. Consequently, the use of GALLO in the analysis of data generated from high-throughput methodologies may improve the identification of hidden pattern across datasets, datamining of previous reported associations, as well as the efficiency in the scrutinization of the genetic architecture of complex traits in livestock.
+
+\vspace{12pt}
+This was a short example of GALLO usage. The user can perform several different approaches in order to explore GALLO potential.
+
+\centering
+## Reference
+\vspace{12pt}
+
+\raggedright
+
+
+Buzanskas, M. E. et al. Candidate genes for male and female reproductive traits in Canchim beef cattle. Journal of animal science and biotechnology, 2017, 8: 67.
+
+Feugang, J. M. et al. Two-stage genome-wide association study identifies integrin beta 5 as having potential role in bull fertility. BMC genomics, 2009, 10: 176.
+
+Cánovas A, Reverter A, DeAtley KL, Ashley RL, Colgrave ML, Fortes MRS, et al. Multi-tissue omics analyses reveal molecular regulatory networks for puberty in composite beef cattle. PLoS One, 2014.
+
+Gu Z, Gu L, Eils R, Schlesner M, Brors B. circlize implements and enhances circular visualization in R. Bioinformatics. 2014, 30(19):2811-2812.
+
+Fonseca PADS, dos Santos FC, Lam S, Suárez-Vega A, Miglior F, Schenkel FS, Diniz LAF, Id-Lahoucine S, Carvalho MRS, Cánovas A. Genetic mechanisms underlying spermatic and testicular traits within and among cattle breeds: systematic review and prioritization of GWAS results. Journal of animal science, 2018, 96(12):4978-4999.
