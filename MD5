@@ -1,4 +1,4 @@
-ec7d24edf0f02d73613db26efc27b838 *DESCRIPTION
+0de72a945d91c72c1b4905bdaf750490 *DESCRIPTION
 0331fa7e2eb8270d81f0e354c0ee7b78 *NAMESPACE
 8c44371396b78fae27a33af4c2d7a41c *NEWS
 eb885e37c191bc54709404ed0398dbe9 *R/Global.R
@@ -28,9 +28,9 @@ bd12a7a0ec6e1f310e69733d85e54456 *README.md
 23d840d1ca7c2675d130e9ee725ab20e *data/QTLwindows.rda
 5f9067a4130b841b21665b2d641b0b5c *data/gffQTLs.rda
 7ca0481b7bdc6401e66747250e8bc16d *data/gtfGenes.rda
-f538dce19a5253a1f3062878598e6e39 *inst/doc/GALLO.R
-50b6c185c0ab0c741ec74e41182eb778 *inst/doc/GALLO.Rmd
-04f12764f3827e9fb74009ce7ba369f4 *inst/doc/GALLO.html
+87127f7bf269a080104ffe76a9692c47 *inst/doc/GALLO.R
+151ebf60d7611b1f8816d82ece0404a5 *inst/doc/GALLO.Rmd
+56f363604be48fcfc71dad2e1d29528e *inst/doc/GALLO.html
 395617041ed0f1d2b72fb0c8473d0f3c *inst/extdata/example.gff
 5a735c45e782b3b002b19224fe27583b *man/Global.Rd
 d901860228610440d3248fe5c89d8547 *man/MultiCores.Rd
@@ -53,4 +53,4 @@ c89e02082c7d9e3d7f5b3299b1c82fc5 *man/sub_qtlEnrich_chrom.Rd
 ef3f17746f509310a48616f48b61b384 *man/sub_qtlEnrich_geno.Rd
 62504ef7fe8a9d214cbb4218aaa6de44 *man/sub_qtl_markers.Rd
 a57b84c9c9f94dfdeb5eb60d61eeb700 *man/sub_qtl_windows.Rd
-50b6c185c0ab0c741ec74e41182eb778 *vignettes/GALLO.Rmd
+151ebf60d7611b1f8816d82ece0404a5 *vignettes/GALLO.Rmd

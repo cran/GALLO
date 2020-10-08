@@ -1,9 +1,3 @@
-## ---- include = FALSE---------------------------------------------------------
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-
 ## ----echo=T, results='asis'---------------------------------------------------
 #Installation
 #devtools::install_github("pablobio/GALLO")
