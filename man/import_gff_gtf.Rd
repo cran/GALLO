@@ -19,5 +19,6 @@ Takes a .gft or .gff file and import into a dataframe
 }
 \examples{
 gffpath <- system.file("extdata", "example.gff", package="GALLO")
+
 qtl.inp <- import_gff_gtf(db_file=gffpath,file_type="gff")
 }

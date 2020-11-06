@@ -44,10 +44,13 @@ The simple bias of investigation for some traits (such as milk production relate
 \examples{
 \donttest{data(QTLmarkers)
 data(gffQTLs)
-out.qtls<-find_genes_qtls_around_markers(db_file=gffQTLs,
-marker_file=QTLmarkers, method = "qtl",
-marker = "snp", interval = 500000, nThreads = NULL)
-out.enrich<-qtl_enrich(qtl_db=gffQTLs, qtl_file=out.qtls,
-qtl_type = "Name", enrich_type = "chromosome",
-chr.subset = NULL, padj = "fdr",nThreads = NULL)}
+out.qtls<-find_genes_qtls_around_markers(
+db_file=gffQTLs,marker_file=QTLmarkers,
+method = "qtl",marker = "snp",
+interval = 500000, nThreads = 1)
+
+out.enrich<-qtl_enrich(qtl_db=gffQTLs,
+qtl_file=out.qtls, qtl_type = "Name",
+enrich_type = "chromosome",chr.subset = NULL,
+padj = "fdr",nThreads = 1)}
 }
