@@ -1,6 +1,6 @@
 Package: GALLO
 Title: Genomic Annotation in Livestock for Positional Candidate LOci
-Version: 1.1
+Version: 1.2
 Authors@R: 
     c(person(given = "Pablo",
            family = "Fonseca",
@@ -10,22 +10,21 @@ Description: The accurate annotation of genes and Quantitative Trait Loci (QTLs)
 URL: <https://github.com/pablobio/GALLO>
 Depends: R (>= 4.0.0)
 biocViews: Software
-Imports: circlize, DT, data.table, doParallel, dplyr, dynamicTreeCut,
-        ggplot2, graphics, grDevices, foreach, lattice , magick,
-        parallel, RColorBrewer, rtracklayer, stats, stringr, unbalhaar,
-        utils
+Imports: circlize, data.table, doParallel, dplyr, DT, ggplot2,
+        graphics, grDevices, foreach, lattice , parallel, RColorBrewer,
+        rtracklayer, stats, stringr, unbalhaar, utils, webshot
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
-Suggests: BiocStyle, Hmisc, knitr, rmarkdown, testthat
+Suggests: Hmisc, knitr, rmarkdown, testthat
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2020-11-06 00:32:19 UTC; pablofonseca
+Packaged: 2021-04-08 15:52:18 UTC; pablofonseca
 Author: Pablo Fonseca [aut, cre],
   Aroa Suarez-Vega [aut],
   Gabriele Marras [aut],
   Angela Cánovas [aut]
 Maintainer: Pablo Fonseca <pfonseca@uoguelph.ca>
 Repository: CRAN
-Date/Publication: 2020-11-06 05:20:08 UTC
+Date/Publication: 2021-04-08 16:20:02 UTC

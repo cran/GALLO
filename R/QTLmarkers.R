@@ -20,7 +20,7 @@
 #'@keywords datasets
 #'
 #'@references Fonseca et al. (2018) Journal of Animal Science, Volume 96, Issue 12, December 2018, Pages 4978–4999.
-#'(\href{https://doi.org/10.1093/jas/sky382}{PubMed})
+#'(\doi{10.1093/jas/sky382}{PubMed})
 #'
 #'@examples
 #' data(QTLmarkers)

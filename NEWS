@@ -1,4 +1,10 @@
-GALLO v0.0-99
+GALLO v1.2
+
+In this version the following updates were included:
+
+- The bug resulting in the switch between the values in the columns Flank_markers and breed was fixed
+
+- The proper citation for GALLO now can be obtained using the command citation("GALLO"")
 
 GALLO v1.1
 
@@ -11,3 +17,5 @@ In this version the following updates were included:
 - The inclusion of the argument horiz in the plot_qtl_info() function, which allow the user to choose if the legend will be plotted vertically or horizontally.
 
 - Changes in the legend and plot area in the QTLentich_plot function in order to better address cases where the there is a large difference between the minimum and maximum number of QTLs annotated.
+
+GALLO v0.0-99

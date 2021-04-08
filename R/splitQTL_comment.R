@@ -28,7 +28,7 @@ splitQTL_comment<-function(output.final){
     tmp.split<-stringr::str_split_fixed(output_qtls$extra_info, ";",n=Inf)
     output_qtls[,"QTL_ID"]<-stringr::str_split_fixed(tmp.split[,1], "=",n=2)[,2]
     output_qtls[,"trait_ID"]<-stringr::str_split_fixed(tmp.split[,6], "=",n=2)[,2]
-    output_qtls[,"breed"]<-stringr::str_split_fixed(tmp.split[,8], "=",n=2)[,2]
+    output_qtls[,"Flank_Markers"]<-stringr::str_split_fixed(tmp.split[,8], "=",n=2)[,2]
     output_qtls[,"Name"]<-stringr::str_split_fixed(tmp.split[,2], "=",n=2)[,2]
     output_qtls[,"Abbrev"]<-stringr::str_split_fixed(tmp.split[,3], "=",n=2)[,2]
     output_qtls[,"Model"]<-stringr::str_split_fixed(tmp.split[,12], "=",n=2)[,2]
@@ -36,6 +36,6 @@ splitQTL_comment<-function(output.final){
     output_qtls[,"pubmed_id"]<-stringr::str_split_fixed(tmp.split[,4], "=",n=2)[,2]
     output_qtls[,"p_value"]<-stringr::str_split_fixed(tmp.split[,15], "=",n=2)[,2]
     output_qtls[,"bayes_value"]<-stringr::str_split_fixed(tmp.split[,14], "=",n=2)[,2]
-    output_qtls[,"Flank_Markers"]<-stringr::str_split_fixed(tmp.split[,7], "=",n=2)[,2]
+    output_qtls[,"breed"]<-stringr::str_split_fixed(tmp.split[,7], "=",n=2)[,2]
     return(output_qtls[,-which(colnames(output_qtls)%in%"extra_info")])
 }

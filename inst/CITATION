@@ -1,0 +1,16 @@
+citHeader("To cite GALLO in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "GALLO: An R package for genomic annotation and integration of multiple data sources in livestock for positional candidate loci",
+  author   = c(person(given = "Pablo",
+           family = "Fonseca",
+           role = c("aut", "cre"),
+           email = "pfonseca@uoguelph.ca"), person("Aroa", "Suarez-Vega", email = "asuarezv@uoguelph.ca", role = "aut"),person("Gabriele", "Marras", email = "gmarras@semex.com", role = "aut"),person("Angela", "Cánovas", email = "acanovas@uoguelph.ca", role = "aut")),
+  journal  = "GigaScience",
+  year     = "2020",
+  volume   = "9",
+  number   = "12",
+  doi      = "10.1093/gigascience/giaa149",
+  textVersion = paste("Fonseca P. A., Suárez-Vega A., Marras G. Cánovas Á. (2020)", "GALLO: An R package for genomic annotation and integration of multiple data sources in livestock for positional candidate loci", "GigaScience, 9(12), giaa149"))
+
