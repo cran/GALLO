@@ -36,6 +36,6 @@ splitQTL_comment<-function(output.final){
     output_qtls[,"pubmed_id"]<-stringr::str_split_fixed(tmp.split[,4], "=",n=2)[,2]
     output_qtls[,"p_value"]<-stringr::str_split_fixed(tmp.split[,15], "=",n=2)[,2]
     output_qtls[,"bayes_value"]<-stringr::str_split_fixed(tmp.split[,14], "=",n=2)[,2]
-    output_qtls[,"breed"]<-stringr::str_split_fixed(tmp.split[,7], "=",n=2)[,2]
+    output_qtls[,"breed"]<-stringr::str_split_fixed(tmp.split[,9], "=",n=2)[,2]
     return(output_qtls[,-which(colnames(output_qtls)%in%"extra_info")])
 }
