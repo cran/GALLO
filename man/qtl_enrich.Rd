@@ -2,7 +2,7 @@
 % Please edit documentation in R/qtl_enrich.R
 \name{qtl_enrich}
 \alias{qtl_enrich}
-\title{Performs a QTL enrichment analysis based in a Bootstrap simulation for each QTL class}
+\title{Performs a QTL enrichment analysis based on a hypergeometric test for each QTL class}
 \usage{
 qtl_enrich(
   qtl_db,

@@ -89,7 +89,7 @@ overlap.genes
 #Creating grouping labels (names of the references)
 group.labels<-unique(out.genes.unique$Reference)
 
-## ---- fig.align="center", fig.width=5, fig.height=5, fig.cap="Figure 1: Gene overlapping among studies."----
+## ----fig.align="center", fig.width=5, fig.height=5, fig.cap="Figure 1: Gene overlapping among studies."----
 #plotting the overlapping information
 plot_overlapping(overlap.genes, nmatrix=2, ntext=3, group=group.labels, labelcex = 1)
 
@@ -100,14 +100,14 @@ oldpar <- par(mar=c(0.5,15,0.5,1))
 plot_qtl_info(out.qtls, qtl_plot = "qtl_type", cex=1.5)
 par(oldpar)
 
-## ---- fig.width=8, fig.height=6, fig.cap="Figure 2: Percentage of each trait annotated as a Reproduction QTL in the candidate intervals."----
+## ----fig.width=8, fig.height=6, fig.cap="Figure 2: Percentage of each trait annotated as a Reproduction QTL in the candidate intervals."----
 #Setting margin parameter to better fit the axis labels
 oldpar<-par(mar=c(5,20,1,1))
 #plotting the percentage of each trait annoatted as a Reproduction QTL
 plot_qtl_info(out.qtls, qtl_plot = "qtl_name", qtl_class="Reproduction")
 par(oldpar)
 
-## ---- results='hide', eval=F--------------------------------------------------
+## ----results='hide', eval=F---------------------------------------------------
 #  #Plotting percentage of the top 10 most frequent traits in all QTL classes
 #  #(This is just an example code, the user do not need to execute
 #  #this command for this tutorial)
@@ -136,7 +136,7 @@ DT::datatable(out.enrich[order(out.enrich$pvalue),],
               extensions = 'FixedColumns',
               options = list(scrollX = TRUE))
 
-## ---- echo=T------------------------------------------------------------------
+## ----echo=T-------------------------------------------------------------------
 #Creating a new ID composed by the trait and the chromosome
 out.enrich$ID<-paste(out.enrich$QTL," - ","CHR",out.enrich$CHR,sep="")
 
@@ -149,11 +149,11 @@ out.enrich.filtered$new_pval<-out.enrich.filtered$adj.pval
 
 out.enrich.filtered[which(out.enrich.filtered$new_pval<(5^-50)),"new_pval"]<-(5^-50)
 
-## ---- fig.width=10, fig.height=8, fig.cap="Figure 3: Top 10 enriched traits identified in the QTL enrichment analysis. The area of the bubbles represents the number of observed QTLs for that class, while the color represents the p-value scale (the darker the color, smaller the p-value). Additionally, the x-axis shows the richness factor for each QTL, representing the ratio of number of QTLs and the expected number of that QTL."----
+## ----fig.width=10, fig.height=8, fig.cap="Figure 3: Top 10 enriched traits identified in the QTL enrichment analysis. The area of the bubbles represents the number of observed QTLs for that class, while the color represents the p-value scale (the darker the color, smaller the p-value). Additionally, the x-axis shows the richness factor for each QTL, representing the ratio of number of QTLs and the expected number of that QTL."----
 #Plotting the enrichment results for the QTL enrichment analysis
 QTLenrich_plot(out.enrich.filtered, x="ID", pval="new_pval")
 
-## ---- fig.width=7, fig.height=7, fig.cap="Figure 4: Chord plot showing the relationship between the positional candidate markers identified in the GWAS (right-hand side) and the enriched QTLs (abbreviations in the left -hand side). The colors correspond to each study, where markers identified by Feugang et al. (2010) are shown in purple, while the markers identified by Buzanskas et al. (2017) are shown in pink."----
+## ----fig.width=7, fig.height=7, fig.cap="Figure 4: Chord plot showing the relationship between the positional candidate markers identified in the GWAS (right-hand side) and the enriched QTLs (abbreviations in the left -hand side). The colors correspond to each study, where markers identified by Feugang et al. (2010) are shown in purple, while the markers identified by Buzanskas et al. (2017) are shown in pink."----
 
 #Filtering the output from QTL annotation
 

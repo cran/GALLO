@@ -26,8 +26,8 @@ Data from a systematic review which evaluated 18 articles regarding genome-wide 
 data(QTLmarkers)
 }
 \references{
-Fonseca et al. (2018) Journal of Animal Science, Volume 96, Issue 12, December 2018, Pages 4978–4999.
-(\doi{10.1093/jas/sky382}{PubMed})
+Fonseca et al. (2018) Journal of Animal Science, Volume 96, Issue 12, December 2018, Pages 4978-4999.
+(\doi{10.1093/jas/sky382})
 }
 \keyword{datasets}
 \keyword{internal}

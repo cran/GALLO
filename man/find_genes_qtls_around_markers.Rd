@@ -15,9 +15,9 @@ find_genes_qtls_around_markers(
 )
 }
 \arguments{
-\item{db_file}{The dataframe obtained using the import_gff_gtf() function}
+\item{db_file}{The data frame obtained using the import_gff_gtf() function}
 
-\item{marker_file}{The file with the SNP or haplotype positions. Detail: For SNP files, the columns “CHR” and “BP” with the chromosome and base pair position, respectively, are mandatory. For the haplotype, the following collumns are mandatory: “CHR”, “BP1” and “BP2”}
+\item{marker_file}{The file with the SNP or haplotype positions. Detail: For SNP files, the columns “CHR” and “BP” with the chromosome and base pair position, respectively, are mandatory. For the haplotype, the following columns are mandatory: “CHR”, “BP1” and “BP2”}
 
 \item{method}{“gene” or “qtl”}
 

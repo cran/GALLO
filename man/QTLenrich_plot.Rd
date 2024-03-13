@@ -19,18 +19,3 @@ A plot with the QTL enrichment results
 \description{
 Takes the output from qtl_enrich function and creates a bubble plot with enrichment results
 }
-\examples{
-\donttest{data(QTLmarkers)
-data(gffQTLs)
-out.qtls<-find_genes_qtls_around_markers(db_file=gffQTLs,
-marker_file=QTLmarkers, method = "qtl",
-marker = "snp", interval = 500000,
-nThreads = 1)
-
-out.enrich<-qtl_enrich(qtl_db=gffQTLs,
-qtl_file=out.qtls, qtl_type = "Name",
-enrich_type = "genome", chr.subset = NULL, padj = "fdr",nThreads = 1)
-
-out.enrich.filtered<-out.enrich[which(out.enrich$adj.pval<0.05),]
-QTLenrich_plot(out.enrich.filtered, x="QTL", pval="adj.pval")}
-}

@@ -34,6 +34,15 @@ import_gff_gtf<-function(db_file,file_type){
         qtl<-qtl[!is.na(qtl$chr),]
         qtl<-qtl[!is.na(qtl$start_pos),]
         qtl<-qtl[!is.na(qtl$end_pos),]
+        
+        tmp.start.pos<-which(qtl$start_pos>qtl$end_pos)
+        
+        tmp.start.val<-qtl$start_pos[tmp.start.pos]
+        
+        qtl[tmp.start.pos,"start_pos"]<-qtl[tmp.start.pos,"end_pos"]
+        
+        qtl[tmp.start.pos,"end_pos"]<-tmp.start.val
+        
         return(as.data.frame(qtl))
         }
     }

@@ -18,13 +18,7 @@
 #' @keywords internal
 #'
 sub_qtlEnrich_chom<-function(qtl_file,qtl_type,qtl.file.types,table.qtl.class,padj,qtl_db,search_qtl,nThreads){
-    nCores<-parallel::detectCores()
-    if (!is.null(nThreads)){
-        cl<-doParallel::registerDoParallel(nThreads)
-    }else{
-        nThreads<- nCores
-        cl<-doParallel::registerDoParallel(nThreads)
-    }
+
     out.final<-foreach::foreach(k=qtl.file.types,.combine="rbind")%dopar%{
         tmp.qtl<-k
         table.qtl.class.tmp<-table.qtl.class[which(table.qtl.class$Var1==tmp.qtl),]
@@ -42,5 +36,4 @@ sub_qtlEnrich_chom<-function(qtl_file,qtl_type,qtl.file.types,table.qtl.class,pa
     }
     out.final$adj.pval<-p.adjust(out.final$pvalue,method=padj,n=nrow(out.final))
     return(out.final)
-    return(cl)
 }

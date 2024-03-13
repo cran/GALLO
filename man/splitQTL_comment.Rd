@@ -7,10 +7,10 @@
 splitQTL_comment(output.final)
 }
 \arguments{
-\item{output_qtls}{Output from QTL annotation}
+\item{output.final}{Output from QTL annotation}
 }
 \value{
-A dataframe with the extra_info column content, from the gff file, broken in several additional columns
+A data frame with the extra_info column content, from the gff file, broken in several additional columns
 }
 \description{
 Takes a list of candidate markers and search for genes a determined interval

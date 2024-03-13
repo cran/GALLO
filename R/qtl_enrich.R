@@ -1,4 +1,4 @@
-#' Performs a QTL enrichment analysis based in a Bootstrap simulation for each QTL class
+#' Performs a QTL enrichment analysis based on a hypergeometric test for each QTL class
 #'
 #' Takes the output from find_genes_qtls_around_markers and run a QTL enrichment analysis
 #' @param qtl_db The object obtained using the import_gff_gtf() function
@@ -27,14 +27,6 @@
 #' padj = "fdr",nThreads = 1)}
 #' @export
 qtl_enrich<-function(qtl_db,qtl_file,qtl_type=c("QTL_type","Name"),enrich_type=c("genome","chromosome"),chr.subset=NULL,nThreads=NULL,padj=c("holm", "hochberg", "hommel", "bonferroni", "BH", "BY","fdr", "none"), verbose=TRUE){
-
-    nCores<-parallel::detectCores()
-    if (!is.null(nThreads)){
-        cl<-autoStopCluster(parallel::makePSOCKcluster(nThreads, setup_strategy = "sequential"))
-        }else{
-            nThreads<- nCores
-            cl<-autoStopCluster(parallel::makePSOCKcluster(nThreads, setup_strategy = "sequential"))
-        }
 
     if(is.null(chr.subset)){
         chr.subset<-unique(qtl_file$CHR)
@@ -71,5 +63,6 @@ out.enrich$QTL<-gsub("_"," ", out.enrich$QTL)
         cat("\n")
         message("End of QTL enrichment analysis")
     }
+
 return(out.enrich)
 }

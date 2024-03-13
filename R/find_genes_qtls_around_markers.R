@@ -1,8 +1,8 @@
 #' Search genes and QTLs around candidate regions
 #'
 #' Takes a list of candidate markers and or regions (haplotypes, CNVs, windows, etc.) and search for genes or QTLs in a determined interval
-#' @param db_file The dataframe obtained using the import_gff_gtf() function
-#' @param marker_file The file with the SNP or haplotype positions. Detail: For SNP files, the columns “CHR” and “BP” with the chromosome and base pair position, respectively, are mandatory. For the haplotype, the following collumns are mandatory: “CHR”, “BP1” and “BP2”
+#' @param db_file The data frame obtained using the import_gff_gtf() function
+#' @param marker_file The file with the SNP or haplotype positions. Detail: For SNP files, the columns “CHR” and “BP” with the chromosome and base pair position, respectively, are mandatory. For the haplotype, the following columns are mandatory: “CHR”, “BP1” and “BP2”
 #' @param method “gene” or “qtl”
 #' @param marker "snp" or "haplotype"
 #' @param interval The interval in base pair which can be included upstream and downstream from the markers or haplotype coordinates.
@@ -12,6 +12,8 @@
 #' @name find_genes_qtls_around_markers
 #' @importFrom utils read.delim
 #' @importFrom parallel stopCluster
+#' @import DT
+#' @import webshot
 #' @examples
 #' data(QTLmarkers)
 #' data(gffQTLs)
@@ -28,14 +30,6 @@ find_genes_qtls_around_markers<-function(db_file,marker_file,method=c("gene","qt
         cat(paste("You are using the method:", method, "with", marker))
         cat("\n")
     }
-
-    nCores<-parallel::detectCores()
-    if (!is.null(nThreads)){
-      cl<-autoStopCluster(parallel::makePSOCKcluster(nThreads, setup_strategy = "sequential"))
-    }else{
-      nThreads<- nCores
-      cl<-autoStopCluster(parallel::makePSOCKcluster(nThreads,setup_strategy = "sequential"))
-      }
 
     if(marker=="snp"){
     #Creating gene data frame
